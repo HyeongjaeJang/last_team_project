@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -17,9 +16,13 @@ const app = express();
 const httpServer = createServer(app);
 const io = new ioServer(httpServer, {
   cors: {
-    origin: process.env.client_URL,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: [
+      "https://flourishing-dusk-0b7984.netlify.app",
+      "https://main--flourishing-dusk-0b7984.netlify.app",
+    ],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
+    optionsSuccessStatus: 204,
   },
 });
 const PORT = process.env.PORT || 4444;
@@ -27,23 +30,31 @@ const PORT = process.env.PORT || 4444;
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ credentials: true, origin: process.env.client_URL }));
+
+// Set up CORS middleware before defining routes
+app.use(
+  cors({
+    origin: [
+      "https://flourishing-dusk-0b7984.netlify.app",
+      "https://main--flourishing-dusk-0b7984.netlify.app",
+    ],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionsSuccessStatus: 204,
+  })
+);
 
 app.get("/", (req, res) => {
   res.json({ message: "welcome to the dressshop application" });
 });
 
 (async () => {
-  // Connect to mongodb
+  // Connect to MongoDB
   await mongoose.connect(process.env.MONGO_URI);
 })();
 
 // Two Main APIs
-
-// Request Data from database
 app.use("/api", api_router);
-
-// Make Authentication Requests
 app.use("/auth", auth_router);
 
 io.on("connection", (sk) => {
@@ -64,5 +75,5 @@ io.on("connection", (sk) => {
 });
 
 httpServer.listen(PORT, () => {
-  console.log(`http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
