@@ -17,7 +17,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new ioServer(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.client_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
@@ -27,7 +27,7 @@ const PORT = process.env.PORT || 4444;
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(cors({ credentials: true, origin: process.env.client_URL }));
 
 app.get("/", (req, res) => {
   res.json({ message: "welcome to the dressshop application" });
