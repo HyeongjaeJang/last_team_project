@@ -15,6 +15,21 @@ const {
 
 const app = express();
 const httpServer = createServer(app);
+// Express middleware example
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://main--flourishing-dusk-0b7984.netlify.app, https://flourishing-dusk-0b7984.netlify.app"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
 const io = new ioServer(httpServer, {
   cors: {
     origin: process.env.client_URL,
