@@ -27,10 +27,6 @@ const io = new ioServer(httpServer, {
 });
 const PORT = process.env.PORT || 4444;
 
-app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.use(
   cors({
     origin: [
@@ -42,6 +38,10 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
+
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.json({ message: "welcome to the dressshop application" });
