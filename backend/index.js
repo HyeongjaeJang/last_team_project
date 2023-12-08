@@ -31,7 +31,6 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Set up CORS middleware before defining routes
 app.use(
   cors({
     origin: [
@@ -49,7 +48,6 @@ app.get("/", (req, res) => {
 });
 
 (async () => {
-  // Connect to MongoDB
   await mongoose.connect(process.env.MONGO_URI);
 })();
 
